@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 
 function Home() {
-  const { data } = useFetch("https://meetup-app-git-main-tek-rajs-projects.vercel.app/events");
+  const { data, loading, error } = useFetch("https://meetup-app-git-main-tek-rajs-projects.vercel.app/events");
 
   const [filter, setFilter] = useState("");
   const [search, setSearch] = useState("");
@@ -26,6 +26,9 @@ function Home() {
 
     return matchesEventType && matchesTitleAndTags;
   });
+
+  if(loading) return <p>Loading...</p>
+  if (error) return <p>Something went wrong: {error.message}</p>;
 
   return (
     <>
@@ -55,7 +58,11 @@ function Home() {
             <div className="col-sm-4 mb-2" key={e._id}>
               <Link to={`/events/${e._id}`} className="text-decoration-none text-dark">
               <div className="card">
-                <img src={e.imgUrl} alt={e.title} />
+                <img src={e.imgUrl} alt={e.title} style={{
+                        width: "100%",
+                        height: "200px",
+                        objectFit: "cover",
+                      }} />
                 <span
                   className={`badge position-absolute top-0 start-0 m-2 px-2 py-1 ${
                     e.eventType === "Online Event"
